@@ -1,0 +1,669 @@
+{
+  "info": {
+    "name": "UC-API-Eventos.paw",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "UC Events API",
+      "item": [
+        {
+          "name": "V1",
+          "item": [
+            {
+              "name": "Taxonomias",
+              "item": [
+                {
+                  "name": "Público al que va dirgido",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "{{URL_BASE_API_UC_LOCAL}}/v1/audiences?api_token=36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                      "query": [
+                        {
+                          "key": "api_token",
+                          "value": "36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                          "disabled": false,
+                          "description": null
+                        }
+                      ],
+                      "protocol": null,
+                      "host": [
+                        "{{URL_BASE_API_UC_LOCAL}}/v1/audiences"
+                      ],
+                      "port": null,
+                      "path": null
+                    },
+                    "description": "Listado de públicos a los que va dirigido existentes el la API",
+                    "header": [],
+                    "body": null,
+                    "auth": null
+                  },
+                  "protocolProfileBehavior": {
+                    "followRedirects": false,
+                    "followOriginalHttpMethod": false,
+                    "followAuthorizationHeader": false
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Tipos de actividades",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "{{URL_BASE_API_UC_LOCAL}}/v1/types_of_activities?api_token=36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                      "query": [
+                        {
+                          "key": "api_token",
+                          "value": "36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                          "disabled": false,
+                          "description": null
+                        }
+                      ],
+                      "protocol": null,
+                      "host": [
+                        "{{URL_BASE_API_UC_LOCAL}}/v1/types_of_activities"
+                      ],
+                      "port": null,
+                      "path": null
+                    },
+                    "description": "Listado de tipos de actividades existentes el la API",
+                    "header": [],
+                    "body": null,
+                    "auth": null
+                  },
+                  "protocolProfileBehavior": {
+                    "followRedirects": false,
+                    "followOriginalHttpMethod": false,
+                    "followAuthorizationHeader": false
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Organizadores",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "{{URL_BASE_API_UC_LOCAL}}/v1/organizers?api_token=36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                      "query": [
+                        {
+                          "key": "api_token",
+                          "value": "36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                          "disabled": false,
+                          "description": null
+                        }
+                      ],
+                      "protocol": null,
+                      "host": [
+                        "{{URL_BASE_API_UC_LOCAL}}/v1/organizers"
+                      ],
+                      "port": null,
+                      "path": null
+                    },
+                    "description": "Listado de organizadores existentes el la API",
+                    "header": [],
+                    "body": null,
+                    "auth": null
+                  },
+                  "protocolProfileBehavior": {
+                    "followRedirects": false,
+                    "followOriginalHttpMethod": false,
+                    "followAuthorizationHeader": false
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Categorias",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "{{URL_BASE_API_UC_LOCAL}}/v1/categories?api_token=36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                      "query": [
+                        {
+                          "key": "api_token",
+                          "value": "36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                          "disabled": false,
+                          "description": null
+                        }
+                      ],
+                      "protocol": null,
+                      "host": [
+                        "{{URL_BASE_API_UC_LOCAL}}/v1/categories"
+                      ],
+                      "port": null,
+                      "path": null
+                    },
+                    "description": "Listado de categorias existentes el la API",
+                    "header": [],
+                    "body": null,
+                    "auth": null
+                  },
+                  "protocolProfileBehavior": {
+                    "followRedirects": false,
+                    "followOriginalHttpMethod": false,
+                    "followAuthorizationHeader": false
+                  },
+                  "response": []
+                }
+              ],
+              "protocolProfileBehavior": null,
+              "response": []
+            },
+            {
+              "name": "Festivales",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{URL_BASE_API_UC_LOCAL}}/v1/festivals?api_token=36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "20191101",
+                      "disabled": true,
+                      "description": "Fecha desde para obtener actividades"
+                    },
+                    {
+                      "key": "to",
+                      "value": "20201230",
+                      "disabled": true,
+                      "description": "Fecha hasta para obtener actividades"
+                    },
+                    {
+                      "key": "featured",
+                      "value": "1",
+                      "disabled": true,
+                      "description": "1 si se desea buscar por destacados o 0 por los no destacados"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true,
+                      "description": "Número de actividades a obtener por página"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": "Número de página de los resultados"
+                    },
+                    {
+                      "key": "audience",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de tipos de público separados por coma"
+                    },
+                    {
+                      "key": "organizers",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de organizadores separados por coma"
+                    },
+                    {
+                      "key": "types_of_activities",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de tipos de actividades separados por coma"
+                    },
+                    {
+                      "key": "categories",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de categorias separados por coma"
+                    },
+                    {
+                      "key": "api_token",
+                      "value": "36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                      "disabled": false,
+                      "description": null
+                    }
+                  ],
+                  "protocol": null,
+                  "host": [
+                    "{{URL_BASE_API_UC_LOCAL}}/v1/festivals"
+                  ],
+                  "port": null,
+                  "path": null
+                },
+                "description": "",
+                "header": [],
+                "body": null,
+                "auth": null
+              },
+              "protocolProfileBehavior": {
+                "followRedirects": false,
+                "followOriginalHttpMethod": false,
+                "followAuthorizationHeader": false
+              },
+              "response": []
+            },
+            {
+              "name": "Actividades",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{URL_BASE_API_UC_LOCAL}}/v1/activities?api_token=36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "20191101",
+                      "disabled": true,
+                      "description": "Fecha desde para obtener actividades"
+                    },
+                    {
+                      "key": "to",
+                      "value": "20201230",
+                      "disabled": true,
+                      "description": "Fecha hasta para obtener actividades"
+                    },
+                    {
+                      "key": "featured",
+                      "value": "1",
+                      "disabled": true,
+                      "description": "1 si se desea buscar por destacados o 0 por los no destacados"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true,
+                      "description": "Número de actividades a obtener por página"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": "Número de página de los resultados"
+                    },
+                    {
+                      "key": "audience",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de tipos de público separados por coma"
+                    },
+                    {
+                      "key": "organizers",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de organizadores separados por coma"
+                    },
+                    {
+                      "key": "types_of_activities",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de tipos de actividades separados por coma"
+                    },
+                    {
+                      "key": "categories",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de categorias separados por coma"
+                    },
+                    {
+                      "key": "api_token",
+                      "value": "36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                      "disabled": false,
+                      "description": null
+                    }
+                  ],
+                  "protocol": null,
+                  "host": [
+                    "{{URL_BASE_API_UC_LOCAL}}/v1/activities"
+                  ],
+                  "port": null,
+                  "path": null
+                },
+                "description": "",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer 5zff9doHWoOiLYtG27todw1SlvYVzeauENF2HvTL8bd5b5HcWLYyN1AK1bntSfaKW2STjRerCioifqZK",
+                    "disabled": false,
+                    "description": null
+                  }
+                ],
+                "body": null,
+                "auth": null
+              },
+              "protocolProfileBehavior": {
+                "followRedirects": false,
+                "followOriginalHttpMethod": false,
+                "followAuthorizationHeader": false
+              },
+              "response": []
+            },
+            {
+              "name": "Actividades - Single",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{URL_BASE_API_UC_LOCAL}}/v1/activities/prueba-de-actividad-una-fecha?api_token=36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "20191101",
+                      "disabled": true,
+                      "description": "Fecha desde para obtener actividades"
+                    },
+                    {
+                      "key": "to",
+                      "value": "20201230",
+                      "disabled": true,
+                      "description": "Fecha hasta para obtener actividades"
+                    },
+                    {
+                      "key": "featured",
+                      "value": "1",
+                      "disabled": true,
+                      "description": "1 si se desea buscar por destacados o 0 por los no destacados"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true,
+                      "description": "Número de actividades a obtener por página"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": "Número de página de los resultados"
+                    },
+                    {
+                      "key": "audience",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de tipos de público separados por coma"
+                    },
+                    {
+                      "key": "organizers",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de organizadores separados por coma"
+                    },
+                    {
+                      "key": "types_of_activities",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de tipos de actividades separados por coma"
+                    },
+                    {
+                      "key": "categories",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de categorias separados por coma"
+                    },
+                    {
+                      "key": "api_token",
+                      "value": "36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                      "disabled": false,
+                      "description": null
+                    }
+                  ],
+                  "protocol": null,
+                  "host": [
+                    "{{URL_BASE_API_UC_LOCAL}}/v1/activities/prueba-de-actividad-una-fecha"
+                  ],
+                  "port": null,
+                  "path": null
+                },
+                "description": "",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer 5zff9doHWoOiLYtG27todw1SlvYVzeauENF2HvTL8bd5b5HcWLYyN1AK1bntSfaKW2STjRerCioifqZK",
+                    "disabled": false,
+                    "description": null
+                  }
+                ],
+                "body": null,
+                "auth": null
+              },
+              "protocolProfileBehavior": {
+                "followRedirects": false,
+                "followOriginalHttpMethod": false,
+                "followAuthorizationHeader": false
+              },
+              "response": []
+            },
+            {
+              "name": "Eventos",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{URL_BASE_API_UC_LOCAL}}/v1/events?api_token=36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "20191101",
+                      "disabled": true,
+                      "description": "Fecha desde para obtener actividades"
+                    },
+                    {
+                      "key": "to",
+                      "value": "20201230",
+                      "disabled": true,
+                      "description": "Fecha hasta para obtener actividades"
+                    },
+                    {
+                      "key": "featured",
+                      "value": "1",
+                      "disabled": true,
+                      "description": "1 si se desea buscar por destacados o 0 por los no destacados"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true,
+                      "description": "Número de actividades a obtener por página"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": "Número de página de los resultados"
+                    },
+                    {
+                      "key": "audience",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de tipos de público separados por coma"
+                    },
+                    {
+                      "key": "organizers",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de organizadores separados por coma"
+                    },
+                    {
+                      "key": "types_of_activities",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de tipos de actividades separados por coma"
+                    },
+                    {
+                      "key": "categories",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de categorias separados por coma"
+                    },
+                    {
+                      "key": "api_token",
+                      "value": "36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                      "disabled": false,
+                      "description": null
+                    }
+                  ],
+                  "protocol": null,
+                  "host": [
+                    "{{URL_BASE_API_UC_LOCAL}}/v1/events"
+                  ],
+                  "port": null,
+                  "path": null
+                },
+                "description": "",
+                "header": [],
+                "body": null,
+                "auth": null
+              },
+              "protocolProfileBehavior": {
+                "followRedirects": false,
+                "followOriginalHttpMethod": false,
+                "followAuthorizationHeader": false
+              },
+              "response": []
+            },
+            {
+              "name": "Eventos - Single",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{URL_BASE_API_UC_LOCAL}}/v1/events/156?api_token=36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "20191101",
+                      "disabled": true,
+                      "description": "Fecha desde para obtener actividades"
+                    },
+                    {
+                      "key": "to",
+                      "value": "20201230",
+                      "disabled": true,
+                      "description": "Fecha hasta para obtener actividades"
+                    },
+                    {
+                      "key": "featured",
+                      "value": "1",
+                      "disabled": true,
+                      "description": "1 si se desea buscar por destacados o 0 por los no destacados"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true,
+                      "description": "Número de actividades a obtener por página"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": "Número de página de los resultados"
+                    },
+                    {
+                      "key": "audience",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de tipos de público separados por coma"
+                    },
+                    {
+                      "key": "organizers",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de organizadores separados por coma"
+                    },
+                    {
+                      "key": "types_of_activities",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de tipos de actividades separados por coma"
+                    },
+                    {
+                      "key": "categories",
+                      "value": "1,2,3,4,5",
+                      "disabled": true,
+                      "description": "Ids de categorias separados por coma"
+                    },
+                    {
+                      "key": "api_token",
+                      "value": "36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U",
+                      "disabled": false,
+                      "description": null
+                    }
+                  ],
+                  "protocol": null,
+                  "host": [
+                    "{{URL_BASE_API_UC_LOCAL}}/v1/events/156"
+                  ],
+                  "port": null,
+                  "path": null
+                },
+                "description": "",
+                "header": [],
+                "body": null,
+                "auth": null
+              },
+              "protocolProfileBehavior": {
+                "followRedirects": false,
+                "followOriginalHttpMethod": false,
+                "followAuthorizationHeader": false
+              },
+              "response": []
+            }
+          ],
+          "protocolProfileBehavior": null,
+          "response": []
+        },
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Request",
+              "request": {
+                "method": "POST",
+                "url": {
+                  "raw": "{{URL_BASE_API_UC_LOCAL}}/v1/login/auth",
+                  "query": null,
+                  "protocol": null,
+                  "host": [
+                    "{{URL_BASE_API_UC_LOCAL}}/v1/login/auth"
+                  ],
+                  "port": null,
+                  "path": null
+                },
+                "description": "",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "disabled": false,
+                    "description": null
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "disabled": false,
+                  "formdata": [
+                    {
+                      "key": "email",
+                      "value": "soporte@ilogica.cl",
+                      "disabled": false,
+                      "type": "text",
+                      "description": null
+                    },
+                    {
+                      "key": "password",
+                      "value": "zxcv250..-ilogica",
+                      "disabled": false,
+                      "type": "text",
+                      "description": null
+                    }
+                  ]
+                },
+                "auth": null
+              },
+              "protocolProfileBehavior": {
+                "followRedirects": false,
+                "followOriginalHttpMethod": false,
+                "followAuthorizationHeader": false
+              },
+              "response": []
+            }
+          ],
+          "protocolProfileBehavior": null,
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": null,
+      "response": []
+    }
+  ]
+}
