@@ -195,4 +195,70 @@ function cptui_register_my_cpts() {
 	];
 
 	register_post_type( "festival", $args );
+
+	/**
+	 * Post Type: Usuarios API.
+	 */
+
+	$labels = [
+		"name" => __( "Usuarios API", "agenda_uc_api" ),
+		"singular_name" => __( "Usuario API", "agenda_uc_api" ),
+		"menu_name" => __( "Usuarios API", "agenda_uc_api" ),
+		"all_items" => __( "Todos los Usuarios API", "agenda_uc_api" ),
+		"add_new" => __( "Añadir nuevo", "agenda_uc_api" ),
+		"add_new_item" => __( "Añadir nuevo Usuario API", "agenda_uc_api" ),
+		"edit_item" => __( "Editar Usuario API", "agenda_uc_api" ),
+		"new_item" => __( "Nuevo Usuario API", "agenda_uc_api" ),
+		"view_item" => __( "Ver Usuario API", "agenda_uc_api" ),
+		"view_items" => __( "Ver Usuarios API", "agenda_uc_api" ),
+		"search_items" => __( "Buscar Usuarios API", "agenda_uc_api" ),
+		"not_found" => __( "No se ha encontrado Usuarios API", "agenda_uc_api" ),
+		"not_found_in_trash" => __( "No se han encontrado Usuarios API en la papelera", "agenda_uc_api" ),
+		"parent" => __( "Usuario API superior", "agenda_uc_api" ),
+		"featured_image" => __( "Imagen destacada para Usuario API", "agenda_uc_api" ),
+		"set_featured_image" => __( "Establece una imagen destacada para Usuario API", "agenda_uc_api" ),
+		"remove_featured_image" => __( "Eliminar la imagen destacada de Usuario API", "agenda_uc_api" ),
+		"use_featured_image" => __( "Usar como imagen destacada de Usuario API", "agenda_uc_api" ),
+		"archives" => __( "Archivos de Usuario API", "agenda_uc_api" ),
+		"insert_into_item" => __( "Insertar en Usuario API", "agenda_uc_api" ),
+		"uploaded_to_this_item" => __( "Subir a Usuario API", "agenda_uc_api" ),
+		"filter_items_list" => __( "Filtrar la lista de Usuarios API", "agenda_uc_api" ),
+		"items_list_navigation" => __( "Navegación de la lista de Usuarios API", "agenda_uc_api" ),
+		"items_list" => __( "Lista de Usuarios API", "agenda_uc_api" ),
+		"attributes" => __( "Atributos de Usuarios API", "agenda_uc_api" ),
+		"name_admin_bar" => __( "Usuario API", "agenda_uc_api" ),
+		"item_published" => __( "Usuario API publicado", "agenda_uc_api" ),
+		"item_published_privately" => __( "Usuario API publicado como privado.", "agenda_uc_api" ),
+		"item_reverted_to_draft" => __( "Usuario API devuelto a borrador.", "agenda_uc_api" ),
+		"item_scheduled" => __( "Usuario API programado", "agenda_uc_api" ),
+		"item_updated" => __( "Usuario API actualizado.", "agenda_uc_api" ),
+		"parent_item_colon" => __( "Usuario API superior", "agenda_uc_api" ),
+	];
+
+	$args = [
+		"label" => __( "Usuarios API", "agenda_uc_api" ),
+		"labels" => $labels,
+		"description" => "",
+		"public" => true,
+		"publicly_queryable" => false,
+		"show_ui" => true,
+		"show_in_rest" => false,
+		"rest_base" => "",
+		"rest_controller_class" => "WP_REST_Posts_Controller",
+		"has_archive" => false,
+		"show_in_menu" => true,
+		"show_in_nav_menus" => true,
+		"delete_with_user" => false,
+		"exclude_from_search" => true,
+		"capability_type" => "post",
+		"map_meta_cap" => true,
+		"hierarchical" => false,
+		"rewrite" => [ "slug" => "usuarios_api", "with_front" => false ],
+		"query_var" => false,
+		"menu_icon" => "dashicons-admin-users",
+		"supports" => [ "title" ],
+	];
+
+	register_post_type( "usuarios_api", $args );
+
 }

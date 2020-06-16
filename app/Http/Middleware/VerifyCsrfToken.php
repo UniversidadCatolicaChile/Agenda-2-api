@@ -12,6 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'api/v1/login/auth'
+        'api/v1/login/auth',
+        'api/v1/login/create-users-from-wp'
     ];
 }

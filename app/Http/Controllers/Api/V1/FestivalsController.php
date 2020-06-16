@@ -111,6 +111,18 @@ class FestivalsController extends Controller
                                 'compare' => '=',
         );
       }
+
+      $keywords = $request->get('keywords');
+      $keywords = explode(',',$keywords);
+      if(!empty($keywords)){
+        foreach($keywords as $key => $word){
+          $meta_query[] = array(
+              'key'     => 'datos_generales_keywords',
+              'value'   => '"'.$word.'"',
+              'compare' => 'LIKE',
+          );
+        }
+      }
       
       $tax_query = array();
       

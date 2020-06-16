@@ -50,4 +50,33 @@ class LoginController extends Controller
       return new JsonResponse(['success' => true, 'user' => $user],200);
       
     }
+    
+
+    public function createUsersFromWordpress(Request $request){
+        $account = $request->only('name_account','email_account', 'password_account');
+        if($request->user()->email == 'agenda@uc.cl'){
+          $user = Customer::where('email', '=', $account['email_account'])->first();
+          if(!$user){
+              $token = Str::random(80);
+              $user = Customer::create([
+                  'name' => $account['name_account'],
+                  'email' => $account['email_account'],
+                  'password' => Hash::make($account['password_account']),
+                  'api_token' => hash('sha256', $token)
+              ]);
+
+              $user->forceFill([
+                  'api_token' => hash('sha256', $token),
+              ])->save();
+
+            return new JsonResponse(['success' => true, 'token' => $token, 'user' => $user->toArray()],200);
+          }else{
+            return new JsonResponse(['success' => false, 'error' => "Usuario con correo {$user->email} ya existe", 'user' => $user->toArray()],200);
+          }
+        }else{
+          return new JsonResponse(['success' => false, 'error' => 'Usuario no esta autorizado'],200);
+        }
+    }
+
+
 }

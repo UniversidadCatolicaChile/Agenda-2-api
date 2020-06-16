@@ -111,6 +111,18 @@ class ActivitiesController extends Controller
                                   'compare' => '=',
           );
         }
+
+        $keywords = $request->get('keywords');
+        $keywords = explode(',',$keywords);
+        if(!empty($keywords)){
+          foreach($keywords as $key => $word){
+            $meta_query[] = array(
+                'key'     => 'datos_generales_keywords',
+                'value'   => '"'.$word.'"',
+                'compare' => 'LIKE',
+            );
+          }
+        }
         
         $tax_query = array();
         
@@ -220,6 +232,11 @@ class ActivitiesController extends Controller
             
             if(!empty($fields['datos_generales']['tipo'])){
               $activity['type'][] = array('id' => $fields['datos_generales']['tipo']->term_id, 'name' => $fields['datos_generales']['tipo']->name);
+            }
+
+
+            if(!empty($fields['datos_generales']['keywords'])){
+                $activity['keywords'][] = $fields['datos_generales']['keywords'];
             }
             
             $activity['place'] = array();

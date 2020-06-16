@@ -10,6 +10,7 @@ Route::prefix('api/v1')->group(function () {
    */
   Route::post('/login/auth', 'Api\V1\LoginController@authenticate');
   Route::get('/login/create-users', 'Api\V1\LoginController@createUsers');
+  Route::middleware('auth:api')->post('/login/create-users-from-wp', 'Api\V1\LoginController@createUsersFromWordpress');
   
   /*
   Post Types
