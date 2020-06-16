@@ -64,7 +64,7 @@ class LoadData extends Command
         
 
         foreach($posts_new_json->posts as $key_post => $value_post) {
-            print_r($value_post);
+            //print_r($value_post);
             $postarr = [];
             $postarr['post_title'] =  $value_post->post->post_title;
             $postarr['post_date'] =  $value_post->post->post_date;
@@ -88,9 +88,18 @@ class LoadData extends Command
                 'role' => 'author'
                 );
                 
+               
                 $user = wp_insert_user($userdata);
-
-                $postarr['post_author'] = $user;
+                if(!is_wp_error($user)){
+                    $postarr['post_author'] = $user;
+                }else{
+                    $user = get_user_by('login', $value_post->autor->data->user_login );
+                    if(!$user){
+                         $postarr['post_author'] = $user->data->ID;
+                    }else{
+                        $postarr['post_author'] = 1;
+                    }
+                }
             }else{
                 $postarr['post_author'] = $user->data->ID;
             }
@@ -102,10 +111,10 @@ class LoadData extends Command
                 $term = get_term_by( 'slug', $tipo->slug, 'tipo');
                 if(!$term){
                     $term = wp_insert_term($tipo->name, 'tipo', array('slug' => $tipo->slug));
-                    print_r($term);
+                    //print_r($term);
                     $tipos[] = $term['term_id'];
                 }else{
-                    print_r($term);
+                    //print_r($term);
                     $tipos[] = $term->term_id;
 
                 }
@@ -165,13 +174,28 @@ class LoadData extends Command
 
 
             $postarr['post_type'] = 'actividad';
-            
-            
+            $found_post = false;
+            if ( $posts_test = get_posts( array( 
+                'name' => $postarr['post_name'], 
+                'post_type' => 'actividad',
+                'post_status' => 'publish',
+                'posts_per_page' => 1
+            ) ) ) {
+                $found_post = $posts_test[0];
+            }
 
-            echo "\n\n----- POST DATA -----\n";
-            print_r($postarr);
-            echo "\n----- END POST DATA -----";
-            $post_id = wp_insert_post( $postarr );
+            if (!$found_post){
+                echo "\n\n----- POST DATA -----\n";
+                print_r($postarr);
+                echo "\n----- END POST DATA -----";
+                $post_id = wp_insert_post( $postarr );
+            }
+            else{   
+                echo "\n\n----- POST DATA FOUND -----\n";
+                print_r($found_post);
+                echo "\n----- END POST DATA FOUND -----";
+                $post_id = false;
+            }
             //$post_id = false;
             if($post_id){
                 if(!empty($tipos)){
@@ -310,8 +334,10 @@ class LoadData extends Command
                 }
 
                 if(!empty($url_thumb)){
-                $attach_id = upload_field_cust($url_thumb, $post_id);
-                update_field('field_5e2994efaff26',$attach_id,$post_id);
+                    $attach_id = upload_field_cust($url_thumb, $post_id);
+                    if($attach_id){
+                        update_field('field_5e2994efaff26',$attach_id,$post_id);
+                    }
                 }
 
             }
@@ -319,6 +345,7 @@ class LoadData extends Command
         }
         
         }
+         echo "\n\n----- PROCESO FINALIZADO -----\n";
         echo "</pre>";
     }
 }
