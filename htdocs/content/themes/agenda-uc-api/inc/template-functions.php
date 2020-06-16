@@ -1,7 +1,10 @@
 <?php
-
+use App\Customer;
 use Themosis\Support\Facades\Action;
 use Themosis\Support\Facades\Filter;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Adds custom classes to the array of body classes.
@@ -150,20 +153,94 @@ function upload_field_cust($file, $post_id)
 {
   require_once( ABSPATH . 'wp-admin/includes/image.php' );
   $wp_upload_dir = wp_upload_dir();
-  $upload = wp_upload_bits($file["name"], null, file_get_contents($file["url"]));
-  $filename = $upload['file'];
-  $filetype = wp_check_filetype( basename( $filename ), null );
-  $attachment = array(
-    'guid'           => $wp_upload_dir['url'] . '/' . basename( $filename ),
-    'post_mime_type' => $filetype['type'],
-    'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
-    'post_content'   => '',
-    'post_status'    => 'inherit'
-  );
-  $attach_id = wp_insert_attachment( $attachment, $filename, $post_id );
-  $attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
-  wp_update_attachment_metadata( $attach_id,  $attach_data );
+  $attach_id = false;
+  try {
+    $upload = wp_upload_bits($file["name"], null, file_get_contents($file["url"]));
+    $filename = $upload['file'];
+    $filetype = wp_check_filetype( basename( $filename ), null );
+    $attachment = array(
+      'guid'           => $wp_upload_dir['url'] . '/' . basename( $filename ),
+      'post_mime_type' => $filetype['type'],
+      'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
+      'post_content'   => '',
+      'post_status'    => 'inherit'
+    );
+    $attach_id = wp_insert_attachment( $attachment, $filename, $post_id );
+    $attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
+    wp_update_attachment_metadata( $attach_id,  $attach_data );
+    return $attach_id;
+  } catch (Exception $e) {
+    return $attach_id;
+  }
   return $attach_id;
-
 }
 
+function set_readonly( $field ) {
+  $field['disabled'] = 1;
+  return $field;
+}
+
+function set_other_readonly( $field ) {
+  global $post;
+  if($post){
+    if($post->post_status == 'publish'){
+      $field['disabled'] = 1;
+    }
+  }
+  return $field;
+}
+
+add_filter('acf/load_field/key=field_5ee8cbfe0fca1', 'set_readonly');
+add_filter('acf/load_field/key=field_5ee8cbd50fc9f', 'set_other_readonly');
+add_filter('acf/load_field/key=field_5ee8cbe00fca0', 'set_other_readonly');
+
+
+
+#add_action( 'draft_to_publish', 'create_api_user', 10, 1);
+
+add_action('acf/save_post', 'create_api_user');
+
+function create_api_user($post_id){
+  $post = get_post($post_id);
+  if ( 'usuarios_api' == $post->post_type ) {
+    if(get_post_status($post_id) == 'publish'){
+      $email = trim(strtolower(get_field('correo',$post_id)));
+      $password = get_field('contrasena',$post_id);
+      $user = Customer::where('email', '=', $email)->first();
+
+      if(!$user){
+          $token = Str::random(80);
+          $user = Customer::create([
+              'name' => get_the_title($post_id),
+              'email' => $email,
+              'password' => Hash::make($password),
+              'api_token' => hash('sha256', $token)
+          ]);
+
+          $user->forceFill([
+              'api_token' => hash('sha256', $token),
+          ])->save();
+
+          update_field('token',$token,$post_id);
+      }else{
+          $token = trim(get_field('token',$post_id));
+          $user->forceFill([
+              'api_token' => hash('sha256', $token),
+              'email' => $email,
+              'password' => Hash::make($password),
+          ])->save();
+      }
+    }
+  }
+}
+
+add_action( 'before_delete_post', 'remove_user_api' );
+function remove_user_api( $post_id ){
+    global $post_type;
+    if ( $post_type != 'usuarios_api' ) return;
+    $email = trim(strtolower(get_field('correo',$post_id)));
+    $user = Customer::where('email', '=', $email)->first();
+    if($user){
+      $user->delete();
+    }
+}
