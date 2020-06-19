@@ -18,7 +18,7 @@ class ActivitiesController extends Controller
     public function index(Request $request)
     {
         add_filter('posts_where', function($where){
-          $where = str_replace("meta_key = 'datos_lugar_y_horarios_horario_varios_dias_Fechas_$", "meta_key LIKE 'datos_lugar_y_horarios_horario_varios_dias_Fechas_%", $where);
+          $where = str_replace("meta_key = 'datos_lugar_y_horarios_horario_varios_dias_fechas_$", "meta_key LIKE 'datos_lugar_y_horarios_horario_varios_dias_fechas_%", $where);
           return $where;
         });
         
@@ -47,38 +47,38 @@ class ActivitiesController extends Controller
         if(!empty($from) && !empty($to)){
           
           $meta_query_val[] = array(
-                                  'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_día',
+                                  'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_dia',
                                   'value'   => array($from, $to),
                                   'compare' => 'BETWEEN',
           );
           
           $meta_query_val[] = array(
-                                  'key'     => 'datos_lugar_y_horarios_horario_varios_dias_Fechas_$_dia',
+                                  'key'     => 'datos_lugar_y_horarios_horario_varios_dias_fechas_$_dia',
                                   'value'   => array($from, $to),
                                   'compare' => 'BETWEEN',
           );
           
         }elseif(!empty($from)){
           $meta_query_val[] = array(
-                                  'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_día',
+                                  'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_dia',
                                   'value'   => $from,
                                   'compare' => '>=',
           );
           
           $meta_query_val[] = array(
-                                  'key'     => 'datos_lugar_y_horarios_horario_varios_dias_Fechas_$_dia',
+                                  'key'     => 'datos_lugar_y_horarios_horario_varios_dias_fechas_$_dia',
                                   'value'   => $from,
                                   'compare' => '>=',
           );
         }elseif (!empty($to)) {
           $meta_query_val[] = array(
-                                  'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_día',
+                                  'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_dia',
                                   'value'   => $to,
                                   'compare' => '<=',
           );
           
           $meta_query_val[] = array(
-                                  'key'     => 'datos_lugar_y_horarios_horario_varios_dias_Fechas_$_dia',
+                                  'key'     => 'datos_lugar_y_horarios_horario_varios_dias_fechas_$_dia',
                                   'value'   => $to,
                                   'compare' => '<=',
           );
@@ -87,13 +87,13 @@ class ActivitiesController extends Controller
           
           $from = $today->format('Ymd');
           $meta_query_val[] = array(
-                                  'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_día',
+                                  'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_dia',
                                   'value'   => $from,
                                   'compare' => '>=',
           );
           
           $meta_query_val[] = array(
-                                  'key'     => 'datos_lugar_y_horarios_horario_varios_dias_Fechas_$_dia',
+                                  'key'     => 'datos_lugar_y_horarios_horario_varios_dias_fechas_$_dia',
                                   'value'   => $from,
                                   'compare' => '>=',
           );
@@ -113,14 +113,18 @@ class ActivitiesController extends Controller
         }
 
         $keywords = $request->get('keywords');
-        $keywords = explode(',',$keywords);
-        if(!empty($keywords)){
-          foreach($keywords as $key => $word){
-            $meta_query[] = array(
-                'key'     => 'datos_generales_keywords',
-                'value'   => '"'.$word.'"',
-                'compare' => 'LIKE',
-            );
+        if($keywords){
+          $keywords = explode(',',$keywords);
+          if(!empty($keywords)){
+            foreach($keywords as $key => $word){
+              if(trim($word) != ''){
+                $meta_query[] = array(
+                    'key'     => 'datos_generales_keywords',
+                    'value'   => '"'.$word.'"',
+                    'compare' => 'LIKE',
+                );
+              }
+            }
           }
         }
         
