@@ -37,6 +37,7 @@ class LoadData extends Command
      */
     public function handle()
     {
+        ini_set('memory_limit', -1);
         define( 'WP_USE_THEMES', false );
         # Load WordPress Core
         // Assuming we're in a subdir: "~/wp-content/plugins/current_dir"
