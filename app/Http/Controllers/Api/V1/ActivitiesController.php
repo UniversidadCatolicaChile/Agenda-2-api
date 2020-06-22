@@ -316,7 +316,6 @@ class ActivitiesController extends Controller
       }
       $fields = get_fields($activity_object);
       $activity['id'] = $activity_object->ID;
-      $activity['featured'] = $fields['es_destacado'];
       
       if(!isset($fields['es_destacado'])){
         $activity['featured'] = 0;
