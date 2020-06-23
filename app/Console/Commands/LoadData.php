@@ -179,7 +179,7 @@ class LoadData extends Command
             if ( $posts_test = get_posts( array( 
                 'name' => $postarr['post_name'], 
                 'post_type' => 'actividad',
-                'post_status' => 'publish',
+                'post_status' => $postarr['post_status'],
                 'posts_per_page' => 1
             ) ) ) {
                 $found_post = $posts_test[0];
