@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use \WP_Query;
 
 class ActivitiesController extends Controller
@@ -29,6 +30,7 @@ class ActivitiesController extends Controller
         $featured = $request->get('featured');
         $limit = $request->get('limit'); 
         $page = $request->get('page'); 
+        $title_content = $request->get('title_content');
         
         if(empty($limit)){
           $limit = 10;
@@ -57,6 +59,20 @@ class ActivitiesController extends Controller
                                   'value'   => array($from, $to),
                                   'compare' => 'BETWEEN',
           );
+
+          $meta_query_val[] = array(
+                                    'relation' => 'and',
+                                    array(
+                                      'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_desde',
+                                      'value'   => $from,
+                                      'compare' => '>='
+                                    ),
+                                    array(
+                                      'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_hasta',
+                                      'value'   => $to,
+                                      'compare' => '<='
+                                    )
+                                  );
           
         }elseif(!empty($from)){
           $meta_query_val[] = array(
@@ -70,6 +86,12 @@ class ActivitiesController extends Controller
                                   'value'   => $from,
                                   'compare' => '>=',
           );
+
+          $meta_query_val[] = array(
+                                  'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_desde',
+                                  'value'   => $from,
+                                  'compare' => '>='
+          );
         }elseif (!empty($to)) {
           $meta_query_val[] = array(
                                   'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_dia',
@@ -81,6 +103,12 @@ class ActivitiesController extends Controller
                                   'key'     => 'datos_lugar_y_horarios_horario_varios_dias_fechas_$_dia',
                                   'value'   => $to,
                                   'compare' => '<=',
+          );
+
+          $meta_query_val[] = array(
+                                  'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_hasta',
+                                  'value'   => $to,
+                                  'compare' => '<='
           );
         }else{
           $today = Carbon::now();
@@ -96,6 +124,12 @@ class ActivitiesController extends Controller
                                   'key'     => 'datos_lugar_y_horarios_horario_varios_dias_fechas_$_dia',
                                   'value'   => $from,
                                   'compare' => '>=',
+          );
+
+          $meta_query_val[] = array(
+                                  'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_desde',
+                                  'value'   => $from,
+                                  'compare' => '>='
           );
         }
         
@@ -176,6 +210,10 @@ class ActivitiesController extends Controller
           $args_query['tax_query']  = $tax_query;
         }
 
+        if(!empty($title_content)){
+          $args_query['s'] = $title_content;
+        }
+
         $activities = new WP_Query($args_query);
         
         $activities_array = array();
@@ -229,9 +267,11 @@ class ActivitiesController extends Controller
                 $activity['audience'][] = array('id' => $pub->term_id, 'name' => $pub->name);
               }
             }
-            
+
             if(!empty($fields['datos_generales']['organizador'])){
-              $activity['organizers'][] = array('id' => $fields['datos_generales']['organizador']->term_id, 'name' => $fields['datos_generales']['organizador']->name);
+              foreach($fields['datos_generales']['organizador'] as $organizer){
+                $activity['organizers'][] = array('id' => $organizer->term_id, 'name' => $organizer->name);
+              }
             }
             
             if(!empty($fields['datos_generales']['tipo'])){
@@ -248,7 +288,7 @@ class ActivitiesController extends Controller
             if(!empty($fields['datos_lugar_y_horarios']['lugar'])){
               if($fields['datos_lugar_y_horarios']['lugar']['es_otro_lugar']){
                 $activity['place']['name'] = $fields['datos_lugar_y_horarios']['lugar']['otro_lugar_text'];
-                $activity['place']['addres'] = $fields['datos_lugar_y_horarios']['lugar']['ubicacion']['address'];
+                $activity['place']['address'] = $fields['datos_lugar_y_horarios']['lugar']['ubicacion']['address'];
                 $activity['place']['coordinates'] = array( 'lat' => $fields['datos_lugar_y_horarios']['lugar']['ubicacion']['lat'], 'lng' => $fields['datos_lugar_y_horarios']['lugar']['ubicacion']['lng']);
                 $activity['place']['detail'] = $fields['datos_lugar_y_horarios']['lugar']['detalle_de_lugar'];
               }else{
@@ -256,23 +296,31 @@ class ActivitiesController extends Controller
                   $ubicacion = get_field('ubicacion',$fields['datos_lugar_y_horarios']['lugar']['lugar']);
                   $activity['place']['name'] = $fields['datos_lugar_y_horarios']['lugar']['lugar']->name;
                   if($ubicacion){
-                    $activity['place']['addres'] = $ubicacion['address'];
+                    $activity['place']['address'] = $ubicacion['address'];
                     $activity['place']['coordinates'] = array( 'lat' => $ubicacion['lat'], 'lng' => $ubicacion['lng']);
+                  }else{
+                    $activity['place']['address'] = null;
+                    $activity['place']['coordinates'] = null;
                   }
                   $activity['place']['detail'] = $fields['datos_lugar_y_horarios']['lugar']['detalle_de_lugar'];
+                  
+                }else{
+                  $activity['place']['name'] = null;
+                  $activity['place']['address'] = null;
+                  $activity['place']['coordinates'] = null;
+                  $activity['place']['detail'] = null;
                   
                 }
               }
             }
             
             $activity['dates'] = array();
-            
             if(!empty($fields['datos_lugar_y_horarios']['horario'])){
               if($fields['datos_lugar_y_horarios']['horario']['un_dia_o_varios'] == 1){
                 if($fields['datos_lugar_y_horarios']['horario']['un_dia']['fecha_un_dia'] >= date_i18n('Ymd') ){
                   $activity['dates'][] = array('day'=>$fields['datos_lugar_y_horarios']['horario']['un_dia']['fecha_un_dia'], 'hours' => $fields['datos_lugar_y_horarios']['horario']['un_dia']['horas']);
                 }
-              }else{
+              }elseif($fields['datos_lugar_y_horarios']['horario']['un_dia_o_varios'] == 2){
                 if(!empty($fields['datos_lugar_y_horarios']['horario']['varios_dias']['fechas'])){
                   foreach ($fields['datos_lugar_y_horarios']['horario']['varios_dias']['fechas'] as $key_fecha => $fecha) {
                     if($fecha['dia'] >= date_i18n('Ymd') ){
@@ -280,6 +328,15 @@ class ActivitiesController extends Controller
                     }
                   }
                   
+                }
+              }else{
+                if($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'] >= date_i18n('Ymd') or $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta'] <= date_i18n('Ymd') ){
+                  $period = CarbonPeriod::create($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'], $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta']);
+                  foreach($period as $date){
+                    if($date->format("Ymd") >= date_i18n('Ymd') ){
+                      $activity['dates'][] = array('day' => $date->format("Ymd"), 'hours' => false);
+                    }
+                  }
                 }
               }
             }
@@ -390,7 +447,7 @@ class ActivitiesController extends Controller
       $activity['contact_info']['phone_numbers'] = array();
       
       if(!empty($fields['informacion_de_contacto'])){
-        
+        $activity['contact_info']['url'] = $fields['informacion_de_contacto']['url'];
         if(!empty($fields['informacion_de_contacto']['emails'])){
           foreach ($fields['informacion_de_contacto']['emails'] as $key_mail => $mail) {
             $activity['contact_info']['emails'][] = $mail['email'];
@@ -409,13 +466,13 @@ class ActivitiesController extends Controller
       if($fields['gratuito_o_pagado'] == 0){
         $activity['pricing_info']['is_free'] = true;
         $activity['pricing_info']['url'] = $fields['valores']['url'];
-        $activity['pricing_info']['agreements'] = isset($fields['convenios']) ? $fields['convenios'] : '';
+        $activity['pricing_info']['agreements'] = $fields['convenios'];
       }else{
         $activity['pricing_info']['is_free'] = false;
         $activity['pricing_info']['from'] = $fields['valores']['desde'];
         $activity['pricing_info']['to'] = $fields['valores']['hasta'];
         $activity['pricing_info']['url'] = $fields['valores']['url'];
-        $activity['pricing_info']['agreements'] = isset($fields['convenios']) ? $fields['convenios'] : '';
+        $activity['pricing_info']['agreements'] = $fields['convenios'];
       }
       
       
@@ -428,7 +485,9 @@ class ActivitiesController extends Controller
       }
       
       if(!empty($fields['datos_generales']['organizador'])){
-        $activity['organizers'][] = array('id' => $fields['datos_generales']['organizador']->term_id, 'name' => $fields['datos_generales']['organizador']->name);
+        foreach($fields['datos_generales']['organizador'] as $organizer){
+          $activity['organizers'][] = array('id' => $organizer->term_id, 'name' => $organizer->name);
+        }
       }
       
       if(!empty($fields['datos_generales']['tipo'])){
@@ -440,7 +499,7 @@ class ActivitiesController extends Controller
       if(!empty($fields['datos_lugar_y_horarios']['lugar'])){
         if($fields['datos_lugar_y_horarios']['lugar']['es_otro_lugar']){
           $activity['place']['name'] = $fields['datos_lugar_y_horarios']['lugar']['otro_lugar_text'];
-          $activity['place']['addres'] = $fields['datos_lugar_y_horarios']['lugar']['ubicacion']['address'];
+          $activity['place']['address'] = $fields['datos_lugar_y_horarios']['lugar']['ubicacion']['address'];
           $activity['place']['coordinates'] = array( 'lat' => $fields['datos_lugar_y_horarios']['lugar']['ubicacion']['lat'], 'lng' => $fields['datos_lugar_y_horarios']['lugar']['ubicacion']['lng']);
           $activity['place']['detail'] = $fields['datos_lugar_y_horarios']['lugar']['detalle_de_lugar'];
         }else{
@@ -448,7 +507,7 @@ class ActivitiesController extends Controller
             $ubicacion = get_field('ubicacion',$fields['datos_lugar_y_horarios']['lugar']['lugar']);
             $activity['place']['name'] = $fields['datos_lugar_y_horarios']['lugar']['lugar']->name;
             if($ubicacion){
-              $activity['place']['addres'] = $ubicacion['address'];
+              $activity['place']['address'] = $ubicacion['address'];
               $activity['place']['coordinates'] = array( 'lat' => $ubicacion['lat'], 'lng' => $ubicacion['lng']);
             }
             $activity['place']['detail'] = $fields['datos_lugar_y_horarios']['lugar']['detalle_de_lugar'];
@@ -461,13 +520,20 @@ class ActivitiesController extends Controller
       
       if(!empty($fields['datos_lugar_y_horarios']['horario'])){
         if($fields['datos_lugar_y_horarios']['horario']['un_dia_o_varios'] == 1){
-          $activity['dates'][] = array('day'=>$fields['datos_lugar_y_horarios']['horario']['un_dia']['fecha_un_dia'], 'hours' => $fields['datos_lugar_y_horarios']['horario']['un_dia']['horas']);
-        }else{
+            $activity['dates'][] = array('day'=>$fields['datos_lugar_y_horarios']['horario']['un_dia']['fecha_un_dia'], 'hours' => $fields['datos_lugar_y_horarios']['horario']['un_dia']['horas']);
+        }elseif($fields['datos_lugar_y_horarios']['horario']['un_dia_o_varios'] == 2){
           if(!empty($fields['datos_lugar_y_horarios']['horario']['varios_dias']['fechas'])){
             foreach ($fields['datos_lugar_y_horarios']['horario']['varios_dias']['fechas'] as $key_fecha => $fecha) {
-              $activity['dates'][] = array('day'=>$fecha['dia'], 'hours' => $fecha['horas']);
+                $activity['dates'][] = array('day'=>$fecha['dia'], 'hours' => $fecha['horas']);
             }
             
+          }
+        }else{
+          if($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'] != '' and $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta'] != '' ){
+            $period = CarbonPeriod::create($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'], $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta']);
+            foreach($period as $date){
+                $activity['dates'][] = array('day' => $date->format("Ymd"), 'hours' => false);
+            }
           }
         }
       }
