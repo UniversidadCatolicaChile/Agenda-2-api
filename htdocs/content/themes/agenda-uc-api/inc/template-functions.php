@@ -80,13 +80,13 @@ Filter::add('intermediate_image_sizes_advanced', function ($sizes) {
       return $sizes;
 });
 
-Action::add('init', function () {
-  foreach ( get_intermediate_image_sizes() as $size ) {
-      if ( !in_array( $size, array( 'normal', 'normal_not_croped') ) ) {
-          remove_image_size( $size );
-      }
-  }
-});
+// Action::add('init', function () {
+//   foreach ( get_intermediate_image_sizes() as $size ) {
+//       if ( !in_array( $size, array('original', 'normal', 'normal_not_croped','600_450','800_600','800_450','1280_960') ) ) {
+//           remove_image_size( $size );
+//       }
+//   }
+// });
 
 Action::add('init', 'cptui_register_my_cpts');
 Action::add('init', 'cptui_register_my_taxes');
@@ -202,33 +202,35 @@ add_action('acf/save_post', 'create_api_user');
 
 function create_api_user($post_id){
   $post = get_post($post_id);
-  if ( 'usuarios_api' == $post->post_type ) {
-    if(get_post_status($post_id) == 'publish'){
-      $email = trim(strtolower(get_field('correo',$post_id)));
-      $password = get_field('contrasena',$post_id);
-      $user = Customer::where('email', '=', $email)->first();
+  if($post){
+    if ( 'usuarios_api' == $post->post_type ) {
+      if(get_post_status($post_id) == 'publish'){
+        $email = trim(strtolower(get_field('correo',$post_id)));
+        $password = get_field('contrasena',$post_id);
+        $user = Customer::where('email', '=', $email)->first();
 
-      if(!$user){
-          $token = Str::random(80);
-          $user = Customer::create([
-              'name' => get_the_title($post_id),
-              'email' => $email,
-              'password' => Hash::make($password),
-              'api_token' => hash('sha256', $token)
-          ]);
+        if(!$user){
+            $token = Str::random(80);
+            $user = Customer::create([
+                'name' => get_the_title($post_id),
+                'email' => $email,
+                'password' => Hash::make($password),
+                'api_token' => hash('sha256', $token)
+            ]);
 
-          $user->forceFill([
-              'api_token' => hash('sha256', $token),
-          ])->save();
+            $user->forceFill([
+                'api_token' => hash('sha256', $token),
+            ])->save();
 
-          update_field('token',$token,$post_id);
-      }else{
-          $token = trim(get_field('token',$post_id));
-          $user->forceFill([
-              'api_token' => hash('sha256', $token),
-              'email' => $email,
-              'password' => Hash::make($password),
-          ])->save();
+            update_field('token',$token,$post_id);
+        }else{
+            $token = trim(get_field('token',$post_id));
+            $user->forceFill([
+                'api_token' => hash('sha256', $token),
+                'email' => $email,
+                'password' => Hash::make($password),
+            ])->save();
+        }
       }
     }
   }

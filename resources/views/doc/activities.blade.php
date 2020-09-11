@@ -93,6 +93,20 @@
                         <td>---</td>
                       </tr>
                       <tr>
+                        <td>keywords</td>
+                        <td>string</td>
+                        <td>ids de keywords separados por coma</td>
+                        <td>No</td>
+                        <td>---</td>
+                      </tr>
+                      <tr>
+                        <td>title_content</td>
+                        <td>string</td>
+                        <td>texto para búsqueda en título y contenido</td>
+                        <td>No</td>
+                        <td>---</td>
+                      </tr>
+                      <tr>
                         <td>api_token</td>
                         <td>string</td>
                         <td>token obtenido luego de un login correcto</td>
@@ -478,7 +492,8 @@
               ],
               "phone_numbers": [
                   "+56988279182"
-              ]
+              ],
+              "url":"http://www.google.cl"
           },
           "pricing_info": {
               "is_free": true,
@@ -639,7 +654,7 @@
                           <tr>
                             <td>contact_info</td>
                             <td>array</td>
-                            <td>Tiene dos elementos: 
+                            <td>Tiene tres elementos: 
                               <table>
                                 <tr>
                                   <td>emails</td>
@@ -650,6 +665,11 @@
                                   <td>phone_numbers</td>
                                   <td>array</td>
                                   <td>listado de números de teléfono en formato <code>+56XXXXXXXXX</code></td>
+                                </tr>
+                                <tr>
+                                  <td>url</td>
+                                  <td>string</td>
+                                  <td>URL de web de contacto</td>
                                 </tr>
                               </table>
                             </td>

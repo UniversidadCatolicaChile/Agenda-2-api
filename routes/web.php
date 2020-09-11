@@ -30,6 +30,8 @@ Route::prefix('api/v1')->group(function () {
   Route::middleware('auth:api')->get('/organizers', 'Api\V1\OrganizersController@index');
   Route::middleware('auth:api')->get('/types_of_activities', 'Api\V1\TypesController@index');
   Route::middleware('auth:api')->get('/audiences', 'Api\V1\AudiencesController@index');
+  Route::middleware('auth:api')->get('/places', 'Api\V1\PlacesController@index');
+  Route::middleware('auth:api')->get('/keywords', 'Api\V1\KeywordsController@index');
   
   /*
   Documentation
@@ -38,6 +40,7 @@ Route::prefix('api/v1')->group(function () {
     Route::get('/', function () { return view('doc.index');})->name('doc_index');
     Route::get('/categories', function () { return view('doc.categories');})->name('doc_categories');
     Route::get('/organizers', function () { return view('doc.organizers'); })->name('doc_organizers');
+    Route::get('/places', function () { return view('doc.places'); })->name('doc_places');
     Route::get('/types_of_activities', function () { return view('doc.types_of_activities'); })->name('doc_types_of_activities');
     Route::get('/audiences', function () { return view('doc.audiences'); })->name('doc_audiences');
     Route::get('/activities', function () { return view('doc.activities');})->name('doc_activities');

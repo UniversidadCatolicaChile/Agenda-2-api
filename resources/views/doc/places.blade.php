@@ -1,65 +1,95 @@
 <html>
 
 <head>
-  <title>Documentación API V1 Agenda UC</title>
+  <title>places</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
   <div id='content'>
-    <h1 id="post-apiv1loginauth">Documentación API V1 Agenda UC</h1>
-    <h3 id="request">Endpoints:</h3>
+    <h1 id="get-apiv1places"><code>GET</code> /api/v1/places</h1>
+    <p><em>Listado de lugares existentes en la API</em></p>
+    <h3 id="request">Request:</h3>
     <ul>
       <li>
-        <p>Login: </p>
-        <a href="{{get_bloginfo('url')}}{{route('doc_login',[],false)}}">/api/v1/login</a>
+        <p>Headers: </p>
+        <ul>
+          <li>Ninguno</li>
+        </ul>
       </li>
       <li>
-        <p>Actividades: </p>
-        <a href="{{get_bloginfo('url')}}{{route('doc_activities',[],false)}}">/api/v1/activities</a>
+        <p>Url Params:</p>
+        <ul>
+          <li>
+            <p><code>api_token</code>: 36AkXVWbI8w1gvvUKzPPpUKzHnHyjSCsBu20qjuSvWfxeyHbRE9WJEC646hQCCKn85cH4D3r2VtL6o1U</p>
+          </li>
+        </ul>
       </li>
       <li>
-        <p>Eventos: </p>
-        <a href="{{get_bloginfo('url')}}{{route('doc_events',[],false)}}">/api/v1/events</a>
+        <p>Body:</p>
+        <ul>
+          <li>
+            <p>Ninguno</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <hr />
+    <h3 id="response">Response:</h3>
+    <ul>
+      <li>
+        <p>Status: <strong>200</strong></p>
       </li>
       <li>
-        <p>Festivales: </p>
-        <a href="{{get_bloginfo('url')}}{{route('doc_festivals',[],false)}}">/api/v1/festivals</a>
+        <p>Body:</p>
       </li>
-      <li>
-        <p>Público: </p>
-        <a href="{{get_bloginfo('url')}}{{route('doc_audiences',[],false)}}">/api/v1/audiences</a>
-      </li>
-      <li>
-        <p>Organizadores: </p>
-        <a href="{{get_bloginfo('url')}}{{route('doc_organizers',[],false)}}">/api/v1/organizers</a>
-      </li>
-      <li>
-        <p>Tipos de Actividad: </p>
-        <a href="{{get_bloginfo('url')}}{{route('doc_types_of_activities',[],false)}}">/api/v1/types_of_activities</a>
-      </li>
-      <li>
-        <p>Categorías: </p>
-        <a href="{{get_bloginfo('url')}}{{route('doc_categories',[],false)}}">/api/v1/categories</a>
-      </li>
-      <li>
-        <p>Lugares: </p>
-        <a href="{{get_bloginfo('url')}}{{route('doc_places',[],false)}}">/api/v1/places</a>
-      </li>
+    </ul>
+    <pre><code class="json language-json">{
+    "places": [
+      {
+        "term_id": 63,
+        "name": "Campus Lo Contador",
+        "slug": "campus-lo-contador",
+        "term_group": 0,
+        "term_taxonomy_id": 63,
+        "taxonomy": "lugar",
+        "description": "",
+        "parent": 0,
+        "count": 28,
+        "filter": "raw",
+        "fields": false
+      },
+      {
+        "term_id": 29,
+        "name": "Campus Oriente",
+        "slug": "campus-oriente",
+        "term_group": 0,
+        "term_taxonomy_id": 29,
+        "taxonomy": "lugar",
+        "description": "",
+        "parent": 0,
+        "count": 23,
+        "filter": "raw",
+        "fields": {
+          "ubicacion": {
+            "address": "Universidad Católica, Santiago, Chile",
+            "lat": -33.4404749,
+            "lng": -70.6406696,
+            "zoom": 15,
+            "place_id": "ChIJE48flp7FYpYRF2aqkABSNjA",
+            "name": "Universidad Católica",
+            "city": "Santiago",
+            "state": "Región Metropolitana",
+            "country": "Chile",
+            "country_short": "CL"
+          }
+        }
+      }
+    ],
+    "success": true
+}
+</code></pre>
 
-    </ul>
-    <h3 id="request">Extras:</h3>
-    <ul>
-      <li>
-          <p>Archivo con ejemplos de request para PAW: </p>
-          <a href="{{get_bloginfo('template_url')}}/doc/uc-api-agenda.paw">uc-api-agenda.paw</a>
-      </li>
-      <li>
-          <p>Archivo con ejemplos de request para Postman: </p>
-          <a href="{{get_bloginfo('template_url')}}/doc/uc-api-agenda-postman.json">uc-api-agenda-postman.json</a>
-      </li>
-    </ul>
-    
   </div>
   <style type='text/css'>
     body {

@@ -142,7 +142,7 @@
                         "id": ""
                     },
                     "taxonomy": "organizador",
-                    "field_type": "select",
+                    "field_type": "multi_select",
                     "allow_null": 0,
                     "add_term": 1,
                     "save_terms": 1,
@@ -785,6 +785,22 @@
             "layout": "block",
             "sub_fields": [
                 {
+                    "key": "field_5f570ad0f8952",
+                    "label": "URL",
+                    "name": "url",
+                    "type": "url",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "100",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": ""
+                },
+                {
                     "key": "field_5e15ca4ff246e",
                     "label": "Emails",
                     "name": "emails",
@@ -1177,7 +1193,8 @@
                             },
                             "choices": {
                                 "1": "Uno",
-                                "2": "Varios"
+                                "2": "Varios",
+                                "3": "Desde Hasta"
                             },
                             "default_value": [],
                             "allow_null": 0,
@@ -1397,6 +1414,65 @@
                                     ]
                                 }
                             ]
+                        },
+                        {
+                            "key": "field_5f570b5aa6f7d",
+                            "label": "Desde Hasta",
+                            "name": "desde_hasta",
+                            "type": "group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5e1dfda0d9986",
+                                        "operator": "==",
+                                        "value": "3"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "100",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "row",
+                            "sub_fields": [
+                                {
+                                    "key": "field_5f570b81a6f7e",
+                                    "label": "Fecha Desde",
+                                    "name": "fecha_desde",
+                                    "type": "date_picker",
+                                    "instructions": "",
+                                    "required": 1,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "50",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "display_format": "d\/m\/Y",
+                                    "return_format": "Ymd",
+                                    "first_day": 1
+                                },
+                                {
+                                    "key": "field_5f570ba5a6f7f",
+                                    "label": "Fecha Hasta",
+                                    "name": "fecha_hasta",
+                                    "type": "date_picker",
+                                    "instructions": "",
+                                    "required": 1,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "50",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "display_format": "d\/m\/Y",
+                                    "return_format": "Ymd",
+                                    "first_day": 1
+                                }
+                            ]
                         }
                     ]
                 }
@@ -1420,5 +1496,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1588878312
+    "modified": 1599855424
 }

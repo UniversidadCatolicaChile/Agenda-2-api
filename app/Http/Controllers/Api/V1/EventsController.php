@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use \WP_Query;
 
 class EventsController extends Controller
@@ -58,6 +59,20 @@ class EventsController extends Controller
                                 'value'   => array($from, $to),
                                 'compare' => 'BETWEEN',
         );
+
+        $meta_query_val[] = array(
+                                'relation' => 'and',
+                                array(
+                                  'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_desde',
+                                  'value'   => $from,
+                                  'compare' => '>='
+                                ),
+                                array(
+                                  'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_hasta',
+                                  'value'   => $to,
+                                  'compare' => '<='
+                                )
+        );
         
       }elseif(!empty($from)){
         $meta_query_val[] = array(
@@ -71,6 +86,12 @@ class EventsController extends Controller
                                 'value'   => $from,
                                 'compare' => '>=',
         );
+
+        $meta_query_val[] = array(
+                                'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_desde',
+                                'value'   => $from,
+                                'compare' => '>='
+        );
       }elseif (!empty($to)) {
         $meta_query_val[] = array(
                                 'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_dia',
@@ -82,6 +103,12 @@ class EventsController extends Controller
                                 'key'     => 'datos_lugar_y_horarios_horario_varios_dias_fechas_$_dia',
                                 'value'   => $to,
                                 'compare' => '<=',
+        );
+
+        $meta_query_val[] = array(
+                                'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_hasta',
+                                'value'   => $to,
+                                'compare' => '<='
         );
       }else{
         $today = Carbon::now();
@@ -97,6 +124,12 @@ class EventsController extends Controller
                                 'key'     => 'datos_lugar_y_horarios_horario_varios_dias_fechas_$_dia',
                                 'value'   => $from,
                                 'compare' => '>=',
+        );
+
+        $meta_query_val[] = array(
+                                'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_desde',
+                                'value'   => $from,
+                                'compare' => '>='
         );
       }
       
@@ -223,7 +256,7 @@ class EventsController extends Controller
             if($fields['horario']['un_dia']['fecha_un_dia'] >= date_i18n('Ymd') ){
               $dates[] = array('day'=>$fields['horario']['un_dia']['fecha_un_dia'], 'hours' => $fields['horario']['un_dia']['horas']);
             }
-          }else{
+          }elseif($fields['horario']['un_dia_o_varios'] == 2){
             if(!empty($fields['horario']['varios_dias']['fechas'])){
               foreach ($fields['horario']['varios_dias']['fechas'] as $key_fecha => $fecha) {
                 if($fecha['dia'] >= date_i18n('Ymd') ){
@@ -231,6 +264,15 @@ class EventsController extends Controller
                 }
               }
               
+            }
+          }else{
+            if($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'] >= date_i18n('Ymd') or $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta'] <= date_i18n('Ymd') ){
+              $period = CarbonPeriod::create($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'], $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta']);
+              foreach($period as $date){
+                if($date->format("Ymd") >= date_i18n('Ymd') ){
+                  $activity['dates'][] = array('day' => $date->format("Ymd"), 'hours' => false);
+                }
+              }
             }
           }
         }
@@ -302,7 +344,7 @@ class EventsController extends Controller
           if($fields['horario']['un_dia']['fecha_un_dia'] >= date_i18n('Ymd') ){
             $dates[] = array('day'=>$fields['horario']['un_dia']['fecha_un_dia'], 'hours' => $fields['horario']['un_dia']['horas']);
           }
-        }else{
+        }elseif($fields['horario']['un_dia_o_varios'] == 2){
           if(!empty($fields['horario']['varios_dias']['fechas'])){
             foreach ($fields['horario']['varios_dias']['fechas'] as $key_fecha => $fecha) {
               if($fecha['dia'] >= date_i18n('Ymd') ){
@@ -310,6 +352,15 @@ class EventsController extends Controller
               }
             }
             
+          }
+        }else{
+          if($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'] >= date_i18n('Ymd') or $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta'] <= date_i18n('Ymd') ){
+            $period = CarbonPeriod::create($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'], $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta']);
+            foreach($period as $date){
+              if($date->format("Ymd") >= date_i18n('Ymd') ){
+                $activity['dates'][] = array('day' => $date->format("Ymd"), 'hours' => false);
+              }
+            }
           }
         }
       }

@@ -18,4 +18,8 @@ return [
     'themosis_sample' => [200, 125, false],
     'normal' => [469, 435, array( 'center', 'top' )],
     'normal_not_croped' => [469, 1000000, false],
+    '600_450' => [600, 450, array( 'center', 'top' )],
+    '800_600' => [800, 600, array( 'center', 'top' )],
+    '800_450' => [800, 450, array( 'center', 'top' )],
+    '1280_960' => [1280, 960, array( 'center', 'top' )]
 ];
