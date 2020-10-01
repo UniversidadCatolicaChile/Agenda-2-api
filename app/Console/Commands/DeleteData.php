@@ -49,19 +49,36 @@ class DeleteData extends Command
         require web_path('cms/wp-admin/includes/image.php' );
         require web_path('cms/wp-admin/includes/file.php' );
         require web_path('cms/wp-admin/includes/media.php' );
+        $page = 1;
+        $max_page = 1000;
 
         $posts = new WP_Query(
-                                array(
-                                        'post_type' => array('actividad','attachment'), 
-                                        'nopaging' => true, 
-                                        'post_status' => array('publish','future','draft','pending','private','trash','auto-draft','Inherit')
-                                    )
-                        );
+            array(
+                    'post_type' => array('actividad','attachment'), 
+                    'posts_per_page' => 100, 
+                    'post_status' => array('publish','future','draft','pending','private','trash','auto-draft','Inherit'),
+                    'paged' => $page
+                )
+        );
 
-        while($posts->have_posts()){
-            $posts->next_post();
-            echo "Borrando post id {$posts->post->ID} tipo {$posts->post->post_type}\n";
-            wp_delete_post($posts->post->ID, true);
+        $max_page = $posts->max_num_pages;
+        echo "Max pages {$max_page} \n";
+        for($i=1;$i<=$max_page; $i++){
+
+            $posts = new WP_Query(
+                array(
+                        'post_type' => array('actividad','attachment'), 
+                        'posts_per_page' => 100, 
+                        'post_status' => array('publish','future','draft','pending','private','trash','auto-draft','Inherit'),
+                    )
+            );
+                    
+            while($posts->have_posts()){
+                $posts->next_post();
+                echo "Borrando post id {$posts->post->ID} tipo {$posts->post->post_type}\n";
+                wp_delete_post($posts->post->ID, true);
+            }
         }
+
     }
 }
