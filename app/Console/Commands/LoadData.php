@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use \WP_Query;
 
 class LoadData extends Command
 {
@@ -37,7 +38,8 @@ class LoadData extends Command
      */
     public function handle()
     {
-        ini_set('memory_limit', -1);
+        $nuevos = 0;
+        $antiguos = 0;
         define( 'WP_USE_THEMES', false );
         # Load WordPress Core
         // Assuming we're in a subdir: "~/wp-content/plugins/current_dir"
@@ -49,14 +51,12 @@ class LoadData extends Command
         require web_path('cms/wp-admin/includes/image.php' );
         require web_path('cms/wp-admin/includes/file.php' );
         require web_path('cms/wp-admin/includes/media.php' );
-        /* Template Name: JSON Eventos */
 
         $posts = file_get_contents("https://agenda.uc.cl/json-data/?passcode=g5g3yLqVsduQ6f8p");
 
 
         $json_posts = json_decode($posts);
 
-        echo "<pre>";
         for ($i=1; $i <= $json_posts->max_num_pages; $i++) {
         $posts_new = file_get_contents("https://agenda.uc.cl/json-data/?passcode=g5g3yLqVsduQ6f8p&page={$i}");
         $posts_new_json = json_decode($posts_new);
@@ -176,16 +176,18 @@ class LoadData extends Command
 
             $postarr['post_type'] = 'actividad';
             $found_post = false;
-            if ( $posts_test = get_posts( array( 
+            $posts_test = get_posts( array( 
                 'name' => $postarr['post_name'], 
                 'post_type' => 'actividad',
-                'post_status' => $postarr['post_status'],
                 'posts_per_page' => 1
-            ) ) ) {
+            ) ) ;
+
+            if (!empty($posts_test)) {
                 $found_post = $posts_test[0];
             }
 
             if (!$found_post){
+                $nuevos++;
                 echo "\n\n----- POST DATA -----\n";
                 print_r($postarr);
                 echo "\n----- END POST DATA -----";
@@ -196,6 +198,7 @@ class LoadData extends Command
                 print_r($found_post);
                 echo "\n----- END POST DATA FOUND -----";
                 $post_id = false;
+                $antiguos++;
             }
             //$post_id = false;
             if($post_id){
@@ -346,7 +349,8 @@ class LoadData extends Command
         }
         
         }
-         echo "\n\n----- PROCESO FINALIZADO -----\n";
-        echo "</pre>";
+         echo "\n\n----- PROCESO FINALIZADO -----\n\n";
+         echo "Post ya ingresados: {$antiguos}\n";
+         echo "Post nuevos: {$nuevos}\n";
     }
 }
