@@ -13,7 +13,9 @@ class Kernel extends HttpKernel
      *
      * @var array
      */
-    protected $middleware = [];
+    protected $middleware = [
+        \App\Http\Middleware\ModifyHeadersMiddleware::class
+    ];
 
     /**
      * The application's route middleware groups.
@@ -23,7 +25,8 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'admin' => [
             \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \App\Http\Middleware\ModifyHeadersMiddleware::class
         ],
         'web' => [
             'wp.headers',
@@ -32,12 +35,14 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             'csrf',
-            \Themosis\Route\Middleware\WordPressBodyClass::class
+            \Themosis\Route\Middleware\WordPressBodyClass::class,
+            \App\Http\Middleware\ModifyHeadersMiddleware::class
         ],
         'api' => [
             'throttle:60,1',
             'wp.can:edit_posts',
-            'bindings'
+            'bindings',
+            \App\Http\Middleware\ModifyHeadersMiddleware::class
         ]
     ];
 
