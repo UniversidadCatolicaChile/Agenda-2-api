@@ -8,30 +8,30 @@ Route::prefix('api/v1')->group(function () {
   /*
   Login
    */
-  Route::post('/login/auth', 'Api\V1\LoginController@authenticate');
-  Route::get('/login/create-users', 'Api\V1\LoginController@createUsers');
-  Route::middleware('auth:api')->post('/login/create-users-from-wp', 'Api\V1\LoginController@createUsersFromWordpress');
+  Route::middleware(['cors'])->post('/login/auth', 'Api\V1\LoginController@authenticate');
+  Route::middleware(['cors'])->get('/login/create-users', 'Api\V1\LoginController@createUsers');
+  Route::middleware(['auth:api','cors'])->post('/login/create-users-from-wp', 'Api\V1\LoginController@createUsersFromWordpress');
   
   /*
   Post Types
   middleware('auth:api')->
   */
-  Route::middleware('auth:api')->get('/activities', 'Api\V1\ActivitiesController@index');
-  Route::middleware('auth:api')->get('/activities/{id}', 'Api\V1\ActivitiesController@show');
-  Route::middleware('auth:api')->get('/events', 'Api\V1\EventsController@index');
-  Route::middleware('auth:api')->get('/events/{id}', 'Api\V1\EventsController@show');
-  Route::middleware('auth:api')->get('/festivals', 'Api\V1\FestivalsController@index');
-  Route::middleware('auth:api')->get('/festivals/{id}', 'Api\V1\FestivalsController@show');
+  Route::middleware(['auth:api','cors'])->get('/activities', 'Api\V1\ActivitiesController@index');
+  Route::middleware(['auth:api','cors'])->get('/activities/{id}', 'Api\V1\ActivitiesController@show');
+  Route::middleware(['auth:api','cors'])->get('/events', 'Api\V1\EventsController@index');
+  Route::middleware(['auth:api','cors'])->get('/events/{id}', 'Api\V1\EventsController@show');
+  Route::middleware(['auth:api','cors'])->get('/festivals', 'Api\V1\FestivalsController@index');
+  Route::middleware(['auth:api','cors'])->get('/festivals/{id}', 'Api\V1\FestivalsController@show');
 
   /*
   Taxonomies
   */
-  Route::middleware('auth:api')->get('/categories', 'Api\V1\CategoriesController@index');
-  Route::middleware('auth:api')->get('/organizers', 'Api\V1\OrganizersController@index');
-  Route::middleware('auth:api')->get('/types_of_activities', 'Api\V1\TypesController@index');
-  Route::middleware('auth:api')->get('/audiences', 'Api\V1\AudiencesController@index');
-  Route::middleware('auth:api')->get('/places', 'Api\V1\PlacesController@index');
-  Route::middleware('auth:api')->get('/keywords', 'Api\V1\KeywordsController@index');
+  Route::middleware(['auth:api','cors'])->get('/categories', 'Api\V1\CategoriesController@index');
+  Route::middleware(['auth:api','cors'])->get('/organizers', 'Api\V1\OrganizersController@index');
+  Route::middleware(['auth:api','cors'])->get('/types_of_activities', 'Api\V1\TypesController@index');
+  Route::middleware(['auth:api','cors'])->get('/audiences', 'Api\V1\AudiencesController@index');
+  Route::middleware(['auth:api','cors'])->get('/places', 'Api\V1\PlacesController@index');
+  Route::middleware(['auth:api','cors'])->get('/keywords', 'Api\V1\KeywordsController@index');
   
   /*
   Documentation
