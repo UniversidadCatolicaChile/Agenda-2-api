@@ -465,14 +465,14 @@ class ActivitiesController extends Controller
       
       if($fields['gratuito_o_pagado'] == 0){
         $activity['pricing_info']['is_free'] = true;
-        $activity['pricing_info']['url'] = $fields['valores']['url'];
-        $activity['pricing_info']['agreements'] = $fields['convenios'];
+        $activity['pricing_info']['url'] = (isset($fields['valores']) && isset($fields['valores']['url'])) ? $fields['valores']['url'] : '';
+        $activity['pricing_info']['agreements'] = (isset($fields['convenios'])) ? $fields['convenios'] : '';
       }else{
         $activity['pricing_info']['is_free'] = false;
-        $activity['pricing_info']['from'] = $fields['valores']['desde'];
-        $activity['pricing_info']['to'] = $fields['valores']['hasta'];
-        $activity['pricing_info']['url'] = $fields['valores']['url'];
-        $activity['pricing_info']['agreements'] = $fields['convenios'];
+        $activity['pricing_info']['from'] = (isset($fields['valores']) && isset($fields['valores']['desde'])) ? $fields['valores']['desde'] : '';
+        $activity['pricing_info']['to'] = (isset($fields['valores']) && isset($fields['valores']['hasta'])) ? $fields['valores']['hasta'] : '';
+        $activity['pricing_info']['url'] = (isset($fields['valores']) && isset($fields['valores']['url'])) ? $fields['valores']['url'] : '';
+        $activity['pricing_info']['agreements'] = (isset($fields['convenios'])) ? $fields['convenios'] : '';
       }
       
       
