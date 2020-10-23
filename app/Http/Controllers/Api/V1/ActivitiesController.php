@@ -261,21 +261,27 @@ class ActivitiesController extends Controller
             }
             
             $activity['audience'] = array();
-            
-            if(!empty($fields['datos_generales']['publico'])){
-              foreach ($fields['datos_generales']['publico'] as $key_pub => $pub) {
+            $publicos = get_the_terms( $activities->post, 'publico');
+            if(!is_wp_error($publicos)){
+              foreach ($publicos as $key_pub => $pub) {
                 $activity['audience'][] = array('id' => $pub->term_id, 'name' => $pub->name);
               }
             }
 
-            if(!empty($fields['datos_generales']['organizador'])){
-              foreach($fields['datos_generales']['organizador'] as $organizer){
+            $activity['organizers'] = array();
+            $organizadores = get_the_terms( $activities->post, 'organizador');
+            if(!is_wp_error($organizadores)){
+              foreach($organizadores as $organizer){
                 $activity['organizers'][] = array('id' => $organizer->term_id, 'name' => $organizer->name);
               }
             }
-            
-            if(!empty($fields['datos_generales']['tipo'])){
-              $activity['type'][] = array('id' => $fields['datos_generales']['tipo']->term_id, 'name' => $fields['datos_generales']['tipo']->name);
+
+            $activity['type'] = array();
+            $tipos = get_the_terms( $activities->post, 'tipo');
+            if(!empty($tipos)){
+              foreach($tipos as $type){
+                $activity['type'][] = array('id' => $type->term_id, 'name' => $type->name);
+              }
             }
 
 
@@ -477,21 +483,27 @@ class ActivitiesController extends Controller
       
       
       $activity['audience'] = array();
-      
-      if(!empty($fields['datos_generales']['publico'])){
-        foreach ($fields['datos_generales']['publico'] as $key_pub => $pub) {
+      $publicos = get_the_terms( $activity_object, 'publico');
+      if(!is_wp_error($publicos)){
+        foreach ($publicos as $key_pub => $pub) {
           $activity['audience'][] = array('id' => $pub->term_id, 'name' => $pub->name);
         }
       }
-      
-      if(!empty($fields['datos_generales']['organizador'])){
-        foreach($fields['datos_generales']['organizador'] as $organizer){
+
+      $activity['organizers'] = array();
+      $organizadores = get_the_terms( $activity_object, 'organizador');
+      if(!is_wp_error($organizadores)){
+        foreach($organizadores as $organizer){
           $activity['organizers'][] = array('id' => $organizer->term_id, 'name' => $organizer->name);
         }
       }
-      
-      if(!empty($fields['datos_generales']['tipo'])){
-        $activity['type'][] = array('id' => $fields['datos_generales']['tipo']->term_id, 'name' => $fields['datos_generales']['tipo']->name);
+            
+      $activity['type'] = array();
+      $tipos = get_the_terms( $activity_object, 'tipo');
+      if(!empty($tipos)){
+        foreach($tipos as $type){
+          $activity['type'][] = array('id' => $type->term_id, 'name' => $type->name);
+        }
       }
       
       $activity['place'] = array();

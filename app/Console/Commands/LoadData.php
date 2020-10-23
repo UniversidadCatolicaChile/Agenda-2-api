@@ -203,19 +203,23 @@ class LoadData extends Command
             //$post_id = false;
             if($post_id){
                 if(!empty($tipos)){
-                wp_set_post_terms( $post_id, $tipos, 'tipo');
+                    wp_set_post_terms( $post_id, $tipos, 'tipo');
+                    update_field('field_5e15cc8236e3f', $tipos, $post_id);
                 }
 
                 if(!empty($dirigidos)){
-                wp_set_post_terms( $post_id, $dirigidos, 'publico');
+                    wp_set_post_terms( $post_id, $dirigidos, 'publico');
+                    update_field('field_5defedc379a16', $dirigidos, $post_id);
                 }
 
                 if(!empty($lugares)){
-                wp_set_post_terms( $post_id, $lugares, 'lugar');
+                    wp_set_post_terms( $post_id, $lugares, 'lugar');
+                    update_field('field_5e15d0029b598', $lugares, $post_id);
                 }
 
                 if(!empty($organizadores)){
-                wp_set_post_terms( $post_id, $organizadores, 'organizador');
+                    wp_set_post_terms( $post_id, $organizadores, 'organizador');
+                    update_field('field_5e15cadd3f7a0', $organizadores, $post_id);
                 }
 
                 update_field('field_5e15c9d8f246c', $value_post->post->post_content, $post_id);
