@@ -61,17 +61,14 @@ class EventsController extends Controller
         );
 
         $meta_query_val[] = array(
-                                'relation' => 'and',
-                                array(
-                                  'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_desde',
-                                  'value'   => $from,
-                                  'compare' => '>='
-                                ),
-                                array(
-                                  'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_hasta',
-                                  'value'   => $to,
-                                  'compare' => '<='
-                                )
+                                'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_desde',
+                                'value'   => array($from, $to),
+                                'compare' => 'BETWEEN',
+        );
+        $meta_query_val[] = array(
+                                'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_hasta',
+                                'value'   => array($from, $to),
+                                'compare' => 'BETWEEN',
         );
         
       }elseif(!empty($from)){
@@ -226,7 +223,7 @@ class EventsController extends Controller
           $activities->next_post();
           $meta_query_events[] = array(
                                   'key'     => 'actividades',
-                                  'value' => '"' . $activities->post.'"',
+                                  'value' => '"'.$activities->post.'"',
                                   'compare' => 'LIKE'
           );
         }
@@ -249,35 +246,37 @@ class EventsController extends Controller
       while($events->have_posts()){
         $events->next_post();
         $activities = get_field('actividades',$events->post->ID);
-        $dates = array();
-        foreach ($activities as $key_activity => $activity_id) {
-          $fields = get_field('datos_lugar_y_horarios',$activity_id);
-          if($fields['horario']['un_dia_o_varios'] == 1){
-            if($fields['horario']['un_dia']['fecha_un_dia'] >= date_i18n('Ymd') ){
-              $dates[] = array('day'=>$fields['horario']['un_dia']['fecha_un_dia'], 'hours' => $fields['horario']['un_dia']['horas']);
-            }
-          }elseif($fields['horario']['un_dia_o_varios'] == 2){
-            if(!empty($fields['horario']['varios_dias']['fechas'])){
-              foreach ($fields['horario']['varios_dias']['fechas'] as $key_fecha => $fecha) {
-                if($fecha['dia'] >= date_i18n('Ymd') ){
-                  $dates[] = array('day'=>$fecha['dia'], 'hours' => $fecha['horas']);
-                }
+        if($activities){
+          $dates = array();
+          foreach ($activities as $key_activity => $activity_id) {
+            $fields = get_field('datos_lugar_y_horarios',$activity_id);
+            if($fields['horario']['un_dia_o_varios'] == 1){
+              if($fields['horario']['un_dia']['fecha_un_dia'] >= date_i18n('Ymd') ){
+                $dates[] = array('day'=>$fields['horario']['un_dia']['fecha_un_dia'], 'hours' => $fields['horario']['un_dia']['horas']);
               }
-              
-            }
-          }else{
-            if($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'] >= date_i18n('Ymd') or $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta'] <= date_i18n('Ymd') ){
-              $period = CarbonPeriod::create($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'], $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta']);
-              foreach($period as $date){
-                if($date->format("Ymd") >= date_i18n('Ymd') ){
-                  $activity['dates'][] = array('day' => $date->format("Ymd"), 'hours' => false);
+            }elseif($fields['horario']['un_dia_o_varios'] == 2){
+              if(!empty($fields['horario']['varios_dias']['fechas'])){
+                foreach ($fields['horario']['varios_dias']['fechas'] as $key_fecha => $fecha) {
+                  if($fecha['dia'] >= date_i18n('Ymd') ){
+                    $dates[] = array('day'=>$fecha['dia'], 'hours' => $fecha['horas']);
+                  }
+                }
+                
+              }
+            }else{
+              if($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'] >= date_i18n('Ymd') or $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta'] <= date_i18n('Ymd') ){
+                $period = CarbonPeriod::create($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'], $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta']);
+                foreach($period as $date){
+                  if($date->format("Ymd") >= date_i18n('Ymd') ){
+                    $activity['dates'][] = array('day' => $date->format("Ymd"), 'hours' => false);
+                  }
                 }
               }
             }
           }
-        }
         
-        $dates = array_msort($dates, array('day'=>SORT_ASC));
+          $dates = array_msort($dates, array('day'=>SORT_ASC));
+        }
         $event = array(
                                 'id' => $events->post->ID,
                                 'title' => $events->post->post_title,

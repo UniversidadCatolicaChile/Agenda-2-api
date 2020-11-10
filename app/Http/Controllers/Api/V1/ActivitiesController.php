@@ -61,18 +61,15 @@ class ActivitiesController extends Controller
           );
 
           $meta_query_val[] = array(
-                                    'relation' => 'and',
-                                    array(
                                       'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_desde',
-                                      'value'   => $from,
-                                      'compare' => '>='
-                                    ),
-                                    array(
+                                      'value'   => array($from, $to),
+                                      'compare' => 'BETWEEN',
+          );
+          $meta_query_val[] = array(
                                       'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_hasta',
-                                      'value'   => $to,
-                                      'compare' => '<='
-                                    )
-                                  );
+                                      'value'   => array($from, $to),
+                                      'compare' => 'BETWEEN',
+          );
           
         }elseif(!empty($from)){
           $meta_query_val[] = array(
@@ -323,14 +320,22 @@ class ActivitiesController extends Controller
             $activity['dates'] = array();
             if(!empty($fields['datos_lugar_y_horarios']['horario'])){
               if($fields['datos_lugar_y_horarios']['horario']['un_dia_o_varios'] == 1){
-                if($fields['datos_lugar_y_horarios']['horario']['un_dia']['fecha_un_dia'] >= date_i18n('Ymd') ){
+                if(!empty($request->get('from')) or !empty($request->get('to')) ){
                   $activity['dates'][] = array('day'=>$fields['datos_lugar_y_horarios']['horario']['un_dia']['fecha_un_dia'], 'hours' => $fields['datos_lugar_y_horarios']['horario']['un_dia']['horas']);
+                }else{
+                  if($fields['datos_lugar_y_horarios']['horario']['un_dia']['fecha_un_dia'] >= date_i18n('Ymd') ){
+                    $activity['dates'][] = array('day'=>$fields['datos_lugar_y_horarios']['horario']['un_dia']['fecha_un_dia'], 'hours' => $fields['datos_lugar_y_horarios']['horario']['un_dia']['horas']);
+                  }
                 }
               }elseif($fields['datos_lugar_y_horarios']['horario']['un_dia_o_varios'] == 2){
                 if(!empty($fields['datos_lugar_y_horarios']['horario']['varios_dias']['fechas'])){
                   foreach ($fields['datos_lugar_y_horarios']['horario']['varios_dias']['fechas'] as $key_fecha => $fecha) {
-                    if($fecha['dia'] >= date_i18n('Ymd') ){
+                    if(!empty($request->get('from')) or !empty($request->get('to')) ){
                       $activity['dates'][] = array('day'=>$fecha['dia'], 'hours' => $fecha['horas']);
+                    }else{
+                      if($fecha['dia'] >= date_i18n('Ymd') ){
+                        $activity['dates'][] = array('day'=>$fecha['dia'], 'hours' => $fecha['horas']);
+                      }
                     }
                   }
                   
@@ -339,13 +344,19 @@ class ActivitiesController extends Controller
                 if($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'] >= date_i18n('Ymd') or $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta'] <= date_i18n('Ymd') ){
                   $period = CarbonPeriod::create($fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_desde'], $fields['datos_lugar_y_horarios']['horario']['desde_hasta']['fecha_hasta']);
                   foreach($period as $date){
-                    if($date->format("Ymd") >= date_i18n('Ymd') ){
+                    if(!empty($request->get('from')) or !empty($request->get('to')) ){
                       $activity['dates'][] = array('day' => $date->format("Ymd"), 'hours' => false);
+                    }else{
+                      if($date->format("Ymd") >= date_i18n('Ymd') ){
+                        $activity['dates'][] = array('day' => $date->format("Ymd"), 'hours' => false);
+                      }
                     }
                   }
                 }
               }
             }
+
+            $activity['fields'] = $fields;
             $activities_array[] = $activity;
             
           }

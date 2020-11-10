@@ -60,17 +60,14 @@ class FestivalsController extends Controller
         );
 
         $meta_query_val[] = array(
-                                'relation' => 'and',
-                                array(
-                                  'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_desde',
-                                  'value'   => $from,
-                                  'compare' => '>='
-                                ),
-                                array(
-                                  'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_hasta',
-                                  'value'   => $to,
-                                  'compare' => '<='
-                                )
+                                'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_desde',
+                                'value'   => array($from, $to),
+                                'compare' => 'BETWEEN',
+        );
+        $meta_query_val[] = array(
+                                'key'     => 'datos_lugar_y_horarios_horario_desde_hasta_fecha_hasta',
+                                'value'   => array($from, $to),
+                                'compare' => 'BETWEEN',
         );
         
       }elseif(!empty($from)){
