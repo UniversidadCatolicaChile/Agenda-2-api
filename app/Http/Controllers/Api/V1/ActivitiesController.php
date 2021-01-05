@@ -291,6 +291,8 @@ class ActivitiesController extends Controller
                 $activity['place'] = array();
 
                 if(!empty($fields['datos_lugar_y_horarios']['lugar'])){
+                    $activity['place']['term_id'] = 0;
+                    if(!empty($fields['datos_lugar_y_horarios']['lugar']['lugar'])) $activity['place']['term_id'] = $fields['datos_lugar_y_horarios']['lugar']['lugar']->term_id;
                     if($fields['datos_lugar_y_horarios']['lugar']['es_otro_lugar']){
                         $activity['place']['name'] = $fields['datos_lugar_y_horarios']['lugar']['otro_lugar_text'];
                         $activity['place']['address'] = $fields['datos_lugar_y_horarios']['lugar']['ubicacion']['address'];
@@ -526,6 +528,8 @@ class ActivitiesController extends Controller
         $activity['place'] = array();
 
         if(!empty($fields['datos_lugar_y_horarios']['lugar'])){
+            $activity['place']['term_id'] = 0;
+            if(!empty($fields['datos_lugar_y_horarios']['lugar']['lugar'])) $activity['place']['term_id'] = $fields['datos_lugar_y_horarios']['lugar']['lugar']->term_id;
             if($fields['datos_lugar_y_horarios']['lugar']['es_otro_lugar']){
                 $activity['place']['name'] = $fields['datos_lugar_y_horarios']['lugar']['otro_lugar_text'];
                 $activity['place']['address'] = $fields['datos_lugar_y_horarios']['lugar']['ubicacion']['address'];
