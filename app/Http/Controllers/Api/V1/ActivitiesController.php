@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Libraries\EOSOptimizer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -34,22 +35,11 @@ class ActivitiesController extends Controller
         $page = $request->get('page');
         $title_content = $request->get('title_content');
 
-        if(empty($limit)){
-            $limit = 10;
-
-        }else{
-            if($limit > 40){
-                $limit = 10;
-            }
-        }
-
-        if(empty($page)){
-            $page = 1;
-        }
+        if(empty($limit) || $limit > 40) $limit = 10;
+        if(empty($page)) $page = 1;
         $meta_query_val = array('relation' => 'OR');
 
         if(!empty($from) && !empty($to)){
-
             $meta_query_val[] = array(
                 'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_dia',
                 'value'   => array($from, $to),
@@ -73,7 +63,8 @@ class ActivitiesController extends Controller
                 'compare' => 'BETWEEN',
             );
 
-        }elseif(!empty($from)){
+        }
+        elseif(!empty($from)){
             $meta_query_val[] = array(
                 'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_dia',
                 'value'   => $from,
@@ -91,7 +82,8 @@ class ActivitiesController extends Controller
                 'value'   => $from,
                 'compare' => '>='
             );
-        }elseif (!empty($to)) {
+        }
+        elseif (!empty($to)) {
             $meta_query_val[] = array(
                 'key'     => 'datos_lugar_y_horarios_horario_un_dia_fecha_un_dia',
                 'value'   => $to,
@@ -109,7 +101,8 @@ class ActivitiesController extends Controller
                 'value'   => $to,
                 'compare' => '<='
             );
-        }else{
+        }
+        else {
             $today = Carbon::now();
 
             $from = $today->format('Ymd');
@@ -132,10 +125,7 @@ class ActivitiesController extends Controller
             );
         }
 
-        if(count($meta_query_val) > 1){
-            $meta_query[] = $meta_query_val;
-        }
-
+        if(count($meta_query_val) > 1) $meta_query[] = $meta_query_val;
 
         if(!empty($featured)){
             $meta_query[] =  array(
@@ -201,6 +191,7 @@ class ActivitiesController extends Controller
 
         $args_query = array(
             'post_type' => 'actividad',
+            'post_status' => ['publish','future'],
             'posts_per_page' => $limit,
             'paged' => $page,
             'meta_query' => $meta_query);
@@ -213,27 +204,26 @@ class ActivitiesController extends Controller
             $args_query['s'] = $title_content;
         }
 
+        EOSOptimizer::parseMetaQuery($args_query);
         $activities = new WP_Query($args_query);
-
         $activities_array = array();
-
-
 
         if($activities->have_posts()){
             while($activities->have_posts()){
+                $activities->the_post();
+                $post = get_post();
                 $activity = array();
-                $activities->next_post();
-                $fields = get_fields($activities->post);
-                $activity['id'] = $activities->post->ID;
+                $fields = get_fields($post);
+                $activity['id'] = $post->ID;
                 if(!isset($fields['es_destacado'])){
                     $activity['featured'] = 0;
                 }else{
                     $activity['featured'] = $fields['es_destacado'];
                 }
-                $activity['title'] = $activities->post->post_title;
-                $activity['created_at'] = $activities->post->post_date;
-                $activity['status'] = $activities->post->post_status;
-                $activity['slug'] = $activities->post->post_name;
+                $activity['title'] = $post->post_title;
+                $activity['created_at'] = $post->post_date;
+                $activity['status'] = $post->post_status;
+                $activity['slug'] = $post->post_name;
 
                 if(!empty($fields['imagen_principal'])){
                     $image = $fields['imagen_principal'];
@@ -260,7 +250,7 @@ class ActivitiesController extends Controller
                 }
 
                 $activity['audience'] = array();
-                $publicos = get_the_terms( $activities->post, 'publico');
+                $publicos = get_the_terms( $post, 'publico');
                 if(!is_wp_error($publicos)){
                     foreach ($publicos as $key_pub => $pub) {
                         $activity['audience'][] = array('id' => $pub->term_id, 'name' => $pub->name);
@@ -268,7 +258,7 @@ class ActivitiesController extends Controller
                 }
 
                 $activity['organizers'] = array();
-                $organizadores = get_the_terms( $activities->post, 'organizador');
+                $organizadores = get_the_terms( $post, 'organizador');
                 if(!is_wp_error($organizadores)){
                     foreach($organizadores as $organizer){
                         $activity['organizers'][] = array('id' => $organizer->term_id, 'name' => $organizer->name);
@@ -276,7 +266,7 @@ class ActivitiesController extends Controller
                 }
 
                 $activity['type'] = array();
-                $tipos = get_the_terms( $activities->post, 'tipo');
+                $tipos = get_the_terms( $post, 'tipo');
                 if(!empty($tipos)){
                     foreach($tipos as $type){
                         $activity['type'][] = array('id' => $type->term_id, 'name' => $type->name);
@@ -365,7 +355,6 @@ class ActivitiesController extends Controller
 
                 $activity['fields'] = $fields;
                 $activities_array[] = $activity;
-
             }
         }
 
