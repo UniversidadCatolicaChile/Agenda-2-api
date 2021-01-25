@@ -1,5 +1,10 @@
 <?php
 
+if($_SERVER['REQUEST_URI'] === '/'){
+    header('Location: https://www.uc.cl/agenda/');
+    exit();
+}
+
 /**
  * Tells WordPress to load the WordPress theme and output it.
  *
