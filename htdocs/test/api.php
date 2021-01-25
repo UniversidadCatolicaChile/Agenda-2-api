@@ -1,5 +1,16 @@
 <?php
 
+/*
+inherit
+private
+publish
+draft
+future
+pending
+trash
+auto-draft
+*/
+
 $extra = '';
 if(isset($_GET) && !empty($_GET)){
     foreach($_GET as $key => &$value){
