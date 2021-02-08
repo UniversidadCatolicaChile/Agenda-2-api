@@ -30,6 +30,23 @@ class EOSOptimizer {
             $prefix = str_replace('wp_','',$table_prefix);
             $query = \DB::table($prefix.'postmeta')->distinct()->select(['post_id']);
             $rel = '';
+            $ids = [];
+
+            if(!empty($args_query['meta_query']['relation'])){
+                $rel = $args_query['meta_query']['relation'];
+                unset($args_query['meta_query']['relation']);
+            }
+            $es_destacado = [];
+            foreach($args_query['meta_query'] as $key => &$val){
+                if(isset($val['key']) && $val['key'] == 'es_destacado'){
+                    $es_destacado = $val;
+                    break;
+                }
+            }
+            if(!empty($es_destacado)){
+                array_unshift($args_query['meta_query'],$es_destacado);
+            }
+
             foreach($args_query['meta_query'] as $key => &$val){
                 if(is_string($key) && $key == 'relation'){
                     $rel = $val;
@@ -57,6 +74,13 @@ class EOSOptimizer {
                     $query = $rel == 'AND' ? $query->where($fn) : $query->orWhere($fn);
                 }
                 else $query = $rel == 'AND' ? $query->where($_fn) : $query->orWhere($_fn);
+                if(empty($ids) || $rel == 'AND') $ids = $query->get()->pluck(['post_id'])->toArray();
+                else {
+                    $_ids = $query->get()->pluck(['post_id'])->toArray();
+                    $ids = array_unique(array_merge($ids,$_ids));
+                }
+                $query = \DB::table($prefix.'postmeta')->distinct()->select(['post_id']);
+                if($rel == 'AND') $query->whereIn('post_id',$ids);
             }
 
             if($test){
@@ -66,7 +90,6 @@ class EOSOptimizer {
                 exit();
             }
             unset($args_query['meta_query']);
-            $ids = $query->get()->pluck(['post_id'])->toArray();
             if(empty($ids)) $ids = [0];
             $args_query['post__in'] = $ids;
             $args_query['ignore_sticky_posts'] = 1;

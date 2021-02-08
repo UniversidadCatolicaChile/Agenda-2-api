@@ -34,6 +34,7 @@ class ActivitiesController extends Controller
         $limit = $request->get('limit');
         $page = $request->get('page');
         $title_content = $request->get('title_content');
+        $order = $request->get('order');
 
         if(empty($limit) || $limit > 40) $limit = 10;
         if(empty($page)) $page = 1;
@@ -194,7 +195,10 @@ class ActivitiesController extends Controller
             'post_status' => ['publish','future'],
             'posts_per_page' => $limit,
             'paged' => $page,
-            'meta_query' => $meta_query);
+            'meta_query' => $meta_query,
+            'orderby' => 'date',
+            'order' => $order ? $order : 'asc',
+        );
 
         if(!empty($tax_query)){
             $args_query['tax_query']  = $tax_query;
